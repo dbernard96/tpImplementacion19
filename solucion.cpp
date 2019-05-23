@@ -22,7 +22,18 @@ bool excesoDeVelocidad(viaje v) {
 
 /******++++**************************** EJERCICIO tiempoTotal ***********+++***********************/
 tiempo tiempoTotal(viaje v) {
+    float max =0;
+    float min =0;
 
+    for (int i = 0; i < v.size(); ++i) {
+        float time = get<0>(v[i]);
+        if(time > max){
+            max = time;
+        } else if(time < min){
+            min = time;
+        }
+    }
+    return max - min;
 }
 
 /************++*********************** EJERCICIO distanciaTotal ************++*********************/
