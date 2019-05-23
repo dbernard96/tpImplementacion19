@@ -43,9 +43,20 @@ distancia distanciaTotal(viaje v) {
 
 /***************************************** EJERCICIO flota ***************************************/
 int flota(vector<viaje> f, tiempo t0, tiempo tf) {
-
+    int res = 0;
+    for (int i = 0; i < f.size(); ++i) {
+        if (estaEnViaje(f[i],t0,tf)) res++;
+    }
+    return res;
 }
 
+bool estaEnViaje(viaje v, tiempo t0,tiempo tf){
+    int i = 0;
+    while (i < v.size() && (get<0>(v[i]) < t0 || get<0>(v[i]) > tf)){
+        i++;
+    }
+    return i < v.size();
+}
 /************************************ EJERCICIO recorridoCubierto *******************************/
 vector<gps> recorridoNoCubierto(viaje v, recorrido r, distancia u) {
 
