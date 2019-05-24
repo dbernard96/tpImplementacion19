@@ -16,8 +16,16 @@ void escribirRecorridos(vector<recorrido> recorridos, string nombreArchivo){
 }
 
 /*****************************+***** EJERCICIO excesoDeVelocidad **********************************/
-bool excesoDeVelocidad(viaje v) {
+double calcVel(tuple<tiempo,gps> a, tuple<tiempo,gps> b){
+	return 	distEnKM(obtenerPosicion(a),obtenerPosicion(b)) * (1/3600) * (1/(obtenerTiempo(b)-obtenerTiempo(a)));
+}
 
+bool excesoDeVelocidad(viaje v) {
+	v = quickSort(v);
+	int i = 0;
+	while(i < v.size()-1 && calcVel(v[i],v[i+1]) <= 80){
+		i++;
+	}
 }
 
 /******++++**************************** EJERCICIO tiempoTotal ***********+++***********************/

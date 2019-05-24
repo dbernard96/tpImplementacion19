@@ -13,7 +13,7 @@ gps desviarPunto(gps p, double desvioMtsLatitud, double desvioMtsLongitud);
 double distMts(gps posicion1, gps posicion2);
 gps puntoGps(double latitud, double longitud);
 tuple<tiempo, gps> medicion(tiempo t, gps g);
-
-
+viaje quickSort(viaje v);
+viaje concatViaje(viaje a, viaje b);
 
 #endif //TRANSPORTEURBANO_AUXILIARES_H

@@ -80,3 +80,33 @@ gps puntoGps(double latitud, double longitud) {
 tuple<tiempo, gps> medicion(tiempo t, gps g) {
     return make_tuple(t, g);
 }
+
+viaje quickSort(viaje v){
+    if(v.size() > 1) {
+        viaje min;
+        viaje eq;
+        viaje max;
+        int pi = div(v.size(), 2).quot;
+        int i = 0;
+        while (i < v.size()) {
+            if (obtenerTiempo(v[i]) < obtenerTiempo(v[pi])) {
+                min.push_back(v[i]);
+            } else if (obtenerTiempo(v[i]) > obtenerTiempo(v[pi])) {
+                max.push_back(v[i]);
+            } else {
+                eq.push_back(v[i]);
+            }
+            i++;
+        }
+        return concatViaje(concatViaje(quickSort(min), eq), quickSort(max));
+    }
+    return v;
+}
+
+viaje concatViaje(viaje a, viaje b){
+    viaje ab = a;
+    for (int i = 0; i < b.size(); ++i) {
+        ab.push_back(b[i]);
+    }
+    return ab;
+}
