@@ -120,8 +120,24 @@ grilla construirGrilla(gps esq1, gps esq2, int n, int m) {
 }
 
 /***************************************** EJERCICIO aPalabra **********************************/
-vector<nombre> aPalabra(recorrido t, grilla g) {
+bool esCeldaDeCoordenada(gps t, celda celda){
+    bool latEnCelda = get<0>(get<1>(celda))<=get<0>(t) && get<0>(t) < get<0>(get<0>(celda));
+    bool longEnCelda = get<1>(get<1>(celda))<=get<1>(t) && get<1>(t) < get<1>(get<0>(celda));
+    return latEnCelda && longEnCelda;
+}
 
+vector<nombre> aPalabra(recorrido t, grilla g) {
+    vector<nombre> res;
+    int i = 0;
+    while(i<t.size()) {
+        int j = 0;
+        while (j < g.size() && !esCeldaDeCoordenada(t[i], g[j])) {
+            j++;
+        }
+        res.push_back(get<2>(g[j]));
+        i++;
+    }
+    return res;
 }
 
 /************************************* EJERCICIO cantidadDeSaltos ******************************/
