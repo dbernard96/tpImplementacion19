@@ -23,9 +23,14 @@ double calcVel(tuple<tiempo,gps> a, tuple<tiempo,gps> b){
 bool excesoDeVelocidad(viaje v) {
 	v = quickSort(v);
 	int i = 0;
-	while(i < v.size()-1 && calcVel(v[i],v[i+1]) <= 80){
+	bool res = true;
+	while(i < v.size()-1){
+	    if(calcVel(v[i],v[i+1]) >= 80){
+	        return res;
+	    }
 		i++;
 	}
+	return !res;
 }
 
 /******++++**************************** EJERCICIO tiempoTotal ***********+++***********************/
@@ -45,7 +50,18 @@ tiempo tiempoTotal(viaje v) {
 }
 
 /************++*********************** EJERCICIO distanciaTotal ************++*********************/
+double distanciaViaje(viaje v){
+    double dist = 0;
+    for(int i=0;i<v.size()-1;i++){
+        dist = dist + distEnKM(obtenerPosicion(v[i]),obtenerPosicion(v[i+1]));
+    }
+    return dist;
+
+}
+
 distancia distanciaTotal(viaje v) {
+    v = quickSort(v);
+    return distanciaViaje(v);
 
 }
 
@@ -66,11 +82,33 @@ bool estaEnViaje(viaje v, tiempo t0,tiempo tf){
     return i < v.size();
 }
 /************************************ EJERCICIO recorridoCubierto *******************************/
-vector<gps> recorridoNoCubierto(viaje v, recorrido r, distancia u) {
+bool cubierto(viaje v, distancia u, gps g){
+    int i = 0;
+    bool res = false;
+    while(i<v.size()){
+        if(distEnKM(obtenerPosicion(v[i]),g)<u){
+            return !res;
+        }
+        i++;
+    }
+    return res;
+}
 
+vector<gps> recorridoNoCubierto(viaje v, recorrido r, distancia u) {
+    vector<gps> res;
+    int i = 0;
+    while(i<r.size()){
+        if(!cubierto(v,u,r[i])) {
+            res.push_back(r[i]);
+        }
+        i++;
+    }
+    return res;
 }
 
 /************************************** EJERCICIO construirGrilla *******************************/
+
+
 grilla construirGrilla(gps esq1, gps esq2, int n, int m) {
 
 }

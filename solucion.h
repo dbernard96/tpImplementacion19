@@ -18,6 +18,8 @@ void escribirRecorridos(vector<recorrido> recorridos, string nombreArchivo);
 void completarHuecos(viaje& v, vector<int> faltantes);
 
 bool estaEnViaje(viaje v, tiempo t0,tiempo tf);
+bool cubierto(viaje v, distancia u ,gps g);
+
 
 
 #endif //TRANSPORTEURBANO_SOLUCION_H
