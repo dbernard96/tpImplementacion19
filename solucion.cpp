@@ -26,6 +26,7 @@ bool excesoDeVelocidad(viaje v) {
 	while(i < v.size()-1 && calcVel(v[i],v[i+1]) <= 80){
 		i++;
 	}
+    return i < v.size();
 }
 
 /******++++**************************** EJERCICIO tiempoTotal ***********+++***********************/
@@ -72,7 +73,17 @@ vector<gps> recorridoNoCubierto(viaje v, recorrido r, distancia u) {
 
 /************************************** EJERCICIO construirGrilla *******************************/
 grilla construirGrilla(gps esq1, gps esq2, int n, int m) {
-
+    grilla g;
+    float rango = (get<0>(esq2) - get<0>(esq1))/n;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            gps e1 = make_tuple(get<0>(esq1)+rango*i,get<1>(esq1)+rango*j);
+            gps e2 = make_tuple(get<0>(esq1)+rango*(i+1),get<1>(esq1)+rango*(j+1));
+            nombre n = make_tuple(i+1,j+1);
+            g.push_back(make_tuple(e1,e2,n));
+        }
+    }
+    return g;
 }
 
 /***************************************** EJERCICIO aPalabra **********************************/
