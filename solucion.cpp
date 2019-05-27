@@ -142,7 +142,14 @@ vector<nombre> aPalabra(recorrido t, grilla g) {
 
 /************************************* EJERCICIO cantidadDeSaltos ******************************/
 int cantidadDeSaltos(grilla g, viaje v) {
-
+    int res = 0;
+    v = quickSort(v);
+    for (int i = 0; i < v.size(); ++i) {
+        for (int j = 0; j < g.size(); ++j) {
+            if(esCeldaDeCoordenada(get<1>(v[i]),g[i])) res++;
+        }
+    }
+    return res;
 }
 
 
