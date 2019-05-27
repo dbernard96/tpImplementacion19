@@ -17,7 +17,7 @@ void escribirRecorridos(vector<recorrido> recorridos, string nombreArchivo){
 
 /*****************************+***** EJERCICIO excesoDeVelocidad **********************************/
 double calcVel(tuple<tiempo,gps> a, tuple<tiempo,gps> b){
-	return 	distEnKM(obtenerPosicion(a),obtenerPosicion(b)) * (1.0/3600) * (1.0/(obtenerTiempo(b)-obtenerTiempo(a)));
+	return 	distEnKM(obtenerPosicion(a),obtenerPosicion(b)) / (3600 * (obtenerTiempo(b)-obtenerTiempo(a)));
 }
 
 bool excesoDeVelocidad(viaje v) {
@@ -48,7 +48,7 @@ tiempo tiempoTotal(viaje v) {
 /************++*********************** EJERCICIO distanciaTotal ************++*********************/
 double distanciaViaje(viaje v){
     distancia dist = 0;
-    for(int i=0;i<v.size()-1;i++){
+    for(int i = 0; i < v.size()-1 ; i++){
         dist = dist + distEnKM(obtenerPosicion(v[i]),obtenerPosicion(v[i+1]));
     }
     return dist;
@@ -80,14 +80,10 @@ bool estaEnViaje(viaje v, tiempo t0,tiempo tf){
 /************************************ EJERCICIO recorridoCubierto *******************************/
 bool cubierto(viaje v, distancia u, gps g){
     int i = 0;
-    bool res = false;
-    while(i<v.size()){
-        if(distEnKM(obtenerPosicion(v[i]),g)<u){
-            return !res;
-        }
+    while(i<v.size() && distEnKM(obtenerPosicion(v[i]),g) >= u){
         i++;
     }
-    return res;
+    return i < v.size();
 }
 
 vector<gps> recorridoNoCubierto(viaje v, recorrido r, distancia u) {
@@ -107,11 +103,11 @@ vector<gps> recorridoNoCubierto(viaje v, recorrido r, distancia u) {
 
 grilla construirGrilla(gps esq1, gps esq2, int n, int m) {
     grilla g;
-    double rango = (get<0>(esq2) - get<0>(esq1))/n;
+    double rango = (obtenerLatitud(esq2) - obtenerLatitud(esq1)) / n;
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < m; ++j) {
-            gps e1 = make_tuple(get<0>(esq1)+rango*i,get<1>(esq1)+rango*j);
-            gps e2 = make_tuple(get<0>(esq1)+rango*(i+1),get<1>(esq1)+rango*(j+1));
+            gps e1 = make_tuple( obtenerLatitud(esq1) + (rango * i) , obtenerLongitud(esq1) + (rango * j));
+            gps e2 = make_tuple( obtenerLatitud(esq1) + (rango * (i+1)) , obtenerLongitud(esq1) + (rango * (j+1)));
             nombre n = make_tuple(i+1,j+1);
             g.push_back(make_tuple(e1,e2,n));
         }
