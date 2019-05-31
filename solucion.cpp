@@ -47,10 +47,6 @@ void escribirRecorridos(vector<recorrido> recorridos, string nombreArchivo){
 }
 
 /*****************************+***** EJERCICIO excesoDeVelocidad **********************************/
-double calcVel(tuple<tiempo,gps> a, tuple<tiempo,gps> b){
-	return 	(distEnKM(obtenerPosicion(a),obtenerPosicion(b))*3600)/(obtenerTiempo(b)-obtenerTiempo(a));
-}
-
 bool excesoDeVelocidad(viaje v) {
     v = quickSort(v);
     int i = 0;
@@ -58,6 +54,10 @@ bool excesoDeVelocidad(viaje v) {
         i++;
     }
     return i < v.size()-1;
+}
+
+double calcVel(tuple<tiempo,gps> a, tuple<tiempo,gps> b){
+    return 	(distEnKM(obtenerPosicion(a),obtenerPosicion(b))*3600)/(obtenerTiempo(b)-obtenerTiempo(a));
 }
 
 /******++++**************************** EJERCICIO tiempoTotal ***********+++***********************/
@@ -77,19 +77,18 @@ tiempo tiempoTotal(viaje v) {
 }
 
 /************++*********************** EJERCICIO distanciaTotal ************++*********************/
+distancia distanciaTotal(viaje v) {
+    v = quickSort(v);
+    return distanciaViaje(v);
+
+}
+
 double distanciaViaje(viaje v){
     distancia dist = 0;
     for(int i = 0; i < v.size()-1 ; i++){
         dist = dist + distEnKM(obtenerPosicion(v[i]),obtenerPosicion(v[i+1]));
     }
     return dist;
-
-}
-
-distancia distanciaTotal(viaje v) {
-    v = quickSort(v);
-    return distanciaViaje(v);
-
 }
 
 /***************************************** EJERCICIO flota ***************************************/
@@ -109,14 +108,6 @@ bool estaEnViaje(viaje v, tiempo t0,tiempo tf){
     return i < v.size();
 }
 /************************************ EJERCICIO recorridoCubierto *******************************/
-bool cubierto(viaje v, distancia u, gps g){
-    int i = 0;
-    while(i<v.size() && distMts(obtenerPosicion(v[i]),g) >= u){
-        i++;
-    }
-    return i < v.size();
-}
-
 vector<gps> recorridoNoCubierto(viaje v, recorrido r, distancia u) {
     vector<gps> res;
     int i = 0;
@@ -129,8 +120,14 @@ vector<gps> recorridoNoCubierto(viaje v, recorrido r, distancia u) {
     return res;
 }
 
+bool cubierto(viaje v, distancia u, gps g){
+    int i = 0;
+    while(i<v.size() && distMts(obtenerPosicion(v[i]),g) >= u){
+        i++;
+    }
+    return i < v.size();
+}
 /************************************** EJERCICIO construirGrilla *******************************/
-
 
 grilla construirGrilla(gps esq1, gps esq2, int n, int m) {
     grilla g;
@@ -147,12 +144,6 @@ grilla construirGrilla(gps esq1, gps esq2, int n, int m) {
 }
 
 /***************************************** EJERCICIO aPalabra **********************************/
-bool esCeldaDeCoordenada(gps t, celda celda){
-    bool latEnCelda = get<0>(get<1>(celda))<=get<0>(t) && get<0>(t) < get<0>(get<0>(celda));
-    bool longEnCelda = get<1>(get<1>(celda))<=get<1>(t) && get<1>(t) < get<1>(get<0>(celda));
-    return latEnCelda && longEnCelda;
-}
-
 vector<nombre> aPalabra(recorrido t, grilla g) {
     vector<nombre> res;
     int i = 0;
@@ -165,6 +156,12 @@ vector<nombre> aPalabra(recorrido t, grilla g) {
         i++;
     }
     return res;
+}
+
+bool esCeldaDeCoordenada(gps t, celda celda){
+    bool latEnCelda = get<0>(get<1>(celda))<=get<0>(t) && get<0>(t) < get<0>(get<0>(celda));
+    bool longEnCelda = get<1>(get<1>(celda))<=get<1>(t) && get<1>(t) < get<1>(get<0>(celda));
+    return latEnCelda && longEnCelda;
 }
 
 /************************************* EJERCICIO cantidadDeSaltos ******************************/
