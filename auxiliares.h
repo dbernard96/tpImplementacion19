@@ -15,5 +15,6 @@ gps puntoGps(double latitud, double longitud);
 tuple<tiempo, gps> medicion(tiempo t, gps g);
 viaje quickSort(viaje v);
 viaje concatViaje(viaje a, viaje b);
+distancia calculoDistHueco(tuple<tiempo,gps> pos1, tuple<tiempo,gps> pos2, tuple<tiempo,gps> hueco);
 
 #endif //TRANSPORTEURBANO_AUXILIARES_H

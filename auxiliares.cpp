@@ -111,3 +111,10 @@ viaje concatViaje(viaje a, viaje b){
     }
     return ab;
 }
+
+distancia calculoDistHueco(tuple<tiempo,gps> pos1, tuple<tiempo,gps> pos2, tuple<tiempo,gps> hueco){
+    tiempo t = obtenerTiempo(hueco) - obtenerTiempo(pos1);
+    t /= (obtenerTiempo(pos2) - obtenerTiempo(pos1));
+    distancia res = distMts(obtenerPosicion(pos2),obtenerPosicion(pos1));
+    return res*t;
+}
