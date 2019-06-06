@@ -83,7 +83,7 @@ distancia distanciaTotal(viaje v) {
 
 }
 
-double distanciaViaje(viaje v){
+distancia distanciaViaje(viaje v){
     distancia dist = 0;
     for(int i = 0; i < v.size()-1 ; i++){
         dist = dist + distEnKM(obtenerPosicion(v[i]),obtenerPosicion(v[i+1]));
@@ -159,21 +159,36 @@ vector<nombre> aPalabra(recorrido t, grilla g) {
 }
 
 bool esCeldaDeCoordenada(gps t, celda celda){
-    bool latEnCelda = get<0>(get<1>(celda))<=get<0>(t) && get<0>(t) < get<0>(get<0>(celda));
-    bool longEnCelda = get<1>(get<1>(celda))<=get<1>(t) && get<1>(t) < get<1>(get<0>(celda));
+    bool latEnCelda = get<0>(get<0>(celda))<=get<0>(t) && get<0>(t) < get<0>(get<1>(celda));
+    bool longEnCelda = get<1>(get<0>(celda))<=get<1>(t) && get<1>(t) < get<1>(get<1>(celda));
     return latEnCelda && longEnCelda;
 }
 
 /************************************* EJERCICIO cantidadDeSaltos ******************************/
-int cantidadDeSaltos(grilla g, viaje v) {
-    int res = 0;
-    v = quickSort(v);
-    for (int i = 0; i < v.size(); ++i) {
-        for (int j = 0; j < g.size(); ++j) {
-            if(esCeldaDeCoordenada(get<1>(v[i]),g[i])) res++;
-        }
-    }
+int diferenciaEntreCeldas(nombre n1, nombre n2){
+    int res = abs(get<0>(n1)-get<0>(n2)) + abs(get<1>(n1)-get<1>(n2)) - 1;
     return res;
 }
 
+int cantidadDeSaltos(grilla g, viaje v) {
+    int res = 0;
+    v = quickSort(v);
+    vector<nombre> nombres = {};
+    for (int i = 0; i < v.size(); ++i) {
+        for (int j = 0; j < g.size(); ++j) {
+            if(esCeldaDeCoordenada(get<1>(v[i]),g[j])){
+                nombres.push_back(get<2>(g[j]));
+            }
+        }
+    }
 
+    for (int k = 0; k < nombres.size()-1; ++k) {
+        if(diferenciaEntreCeldas(nombres[k],nombres[k+1]) >= 1){
+            res++;
+        }
+    }
+
+    return res;
+}
+/**************************************/
+void completarHuecos(viaje& v, vector<int> faltantes){}

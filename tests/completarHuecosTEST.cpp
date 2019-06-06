@@ -60,7 +60,7 @@ TEST(completarHuecosTEST, multiplesHuecosSeparadosNoOrd){
     completarHuecos(v,faltantes);
 
     distancia res = distMts(obtenerPosicion(v[faltantes[0]]),obtenerPosicion(v[3]));
-    EXPECT_EQ(res,calculoDistHueco(v[3],v[2],v[faltantes[0]]));
+    ASSERT_EQ(res,calculoDistHueco(v[3],v[2],v[faltantes[0]]));
 
     res = distMts(obtenerPosicion(v[faltantes[1]]),obtenerPosicion(v[5]));
     EXPECT_EQ(res,calculoDistHueco(v[5],v[0],v[faltantes[1]]));
@@ -75,6 +75,8 @@ TEST(completarHuecosTEST,multiplesHuecosJuntosNoOrd){
 
     for (int i = 0; i < faltantes.size(); ++i) {
         distancia res = distMts(obtenerPosicion(v[faltantes[i]]),obtenerPosicion(v[v.size()-1]));
-        EXPECT_EQ(res,calculoDistHueco(v[v.size()-1],v[0],v[faltantes[i]]));
+        ASSERT_EQ(res,calculoDistHueco(v[v.size()-1],v[0],v[faltantes[i]]));
     }
 }
+
+
