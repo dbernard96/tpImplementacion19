@@ -64,10 +64,9 @@ double calcVel(tuple<tiempo,gps> a, tuple<tiempo,gps> b){
 
 /******++++**************************** EJERCICIO tiempoTotal ***********+++***********************/
 tiempo tiempoTotal(viaje v) {
-    tiempo max =0;
-    tiempo min =0;
-
-    for (int i = 0; i < v.size(); ++i) {
+    tiempo max = obtenerTiempo(v[0]);
+    tiempo min = obtenerTiempo(v[0]);
+    for (int i = 1; i < v.size(); ++i) {
         tiempo time = obtenerTiempo(v[i]);
         if(time > max){
             max = time;

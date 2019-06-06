@@ -10,6 +10,6 @@ TEST(tiempoTotalTEST, viajeOrdenado){
 }
 
 TEST(tiempoTotalTEST, viajeNoOrdenado){
-    viaje v = {make_tuple(2,make_tuple(0,0)),make_tuple(0,make_tuple(0,0)),make_tuple(1,make_tuple(0,0))};
+    viaje v = {make_tuple(3,make_tuple(0,0)),make_tuple(1,make_tuple(0,0)),make_tuple(2,make_tuple(0,0))};
     EXPECT_EQ(tiempoTotal(v),2);
 }
