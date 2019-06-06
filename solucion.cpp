@@ -19,11 +19,12 @@ void escribirGrilla(grilla g, string nombreArchivo){
 			f << obtenerLatitud(get<1>(g[i])) << '\t';
 			f << obtenerLongitud(get<1>(g[i])) << '\t';
 			f << "(" << get<0>(get<2>(g[i]));
-			f << "," << get<1>(get<2>(g[i])) << ")";
+			f << "," << get<1>(get<2>(g[i])) << ")" << endl;
 			i++;
 
 		}
 	}
+	f.close();
 }
 
 void escribirRecorridos(vector<recorrido> recorridos, string nombreArchivo){
@@ -44,6 +45,7 @@ void escribirRecorridos(vector<recorrido> recorridos, string nombreArchivo){
 			}
 		}
 	}
+	f.close();
 }
 
 /*****************************+***** EJERCICIO excesoDeVelocidad **********************************/
