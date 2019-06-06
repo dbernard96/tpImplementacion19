@@ -14,13 +14,12 @@ void escribirGrilla(grilla g, string nombreArchivo){
 		int i = 0;
 		while(i < g.size()) {
 
-			f << obtenerLatitud(get<0>(g[i]));
-			f << obtenerLongitud(get<0>(g[i]));
-			f << obtenerLatitud(get<1>(g[i]));
-			f << obtenerLongitud(get<1>(g[i]));
-			f << get<0>(get<2>(g[i]));
-			f << get<1>(get<2>(g[i]));
-			f << endl;
+			f << obtenerLatitud(get<0>(g[i])) << '\t';
+			f << obtenerLongitud(get<0>(g[i])) << '\t';
+			f << obtenerLatitud(get<1>(g[i])) << '\t';
+			f << obtenerLongitud(get<1>(g[i])) << '\t';
+			f << "(" << get<0>(get<2>(g[i]));
+			f << "," << get<1>(get<2>(g[i])) << ")";
 			i++;
 
 		}
@@ -31,17 +30,18 @@ void escribirRecorridos(vector<recorrido> recorridos, string nombreArchivo){
 	ofstream f;
 	f.open(nombreArchivo);
 	if(!f.fail()){
-		int i = 0;
+		int i = 0;int j = 0;
 		while (i < recorridos.size()){
-			int j = 0;
-			while(j < recorridos[i].size()){
-				f << i;
-				f << obtenerLatitud(recorridos[i][j]);
-				f << obtenerLongitud(recorridos[i][j]);
-				j++;
+			f << i << '\t';
+			f << obtenerLatitud(recorridos[i][j]) << '\t';
+			f << obtenerLongitud(recorridos[i][j]) << endl;
+
+			if (j < recorridos[i].size()-1){
+			    j++;
+			}else{
+			    j = 0;
+			    i++;
 			}
-			
-			i++;
 		}
 	}
 }
