@@ -115,7 +115,7 @@ grilla construirGrilla(gps esq1, gps esq2, int n, int m) {
     int i = 0;
     int j = 0;
     while(i < n){
-        g[n * i + j] = (makeCelda(esq1,esq2,n,i,j));
+        g[m * i + j] = (makeCelda(esq1,esq2,n,i,j));
         if(j < m - 1){
             j++;
         }else{
@@ -123,6 +123,7 @@ grilla construirGrilla(gps esq1, gps esq2, int n, int m) {
             j=0;
         }
     }
+
     return g;
 }
 
