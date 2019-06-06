@@ -37,7 +37,6 @@ double distMts(gps posicion1, gps posicion2){
     return distEnKM(posicion1, posicion2) * 1000;
 }
 
-
 double distEnKM(gps posicion1, gps posicion2) {
     double latitud1 = obtenerLatitud(posicion1);
     double latitud2 = obtenerLatitud(posicion2);
@@ -72,7 +71,6 @@ gps desviarPunto(gps p, double desvioMtsLatitud, double desvioMtsLongitud){
     return puntoGps(new_latitude, new_longitude);
 
 }
-
 
 gps puntoGps(double latitud, double longitud) {
     return make_tuple(latitud, longitud);
@@ -117,4 +115,35 @@ distancia calculoDistHueco(tuple<tiempo,gps> pos1, tuple<tiempo,gps> pos2, tuple
     t /= (obtenerTiempo(pos2) - obtenerTiempo(pos1));
     distancia res = distMts(obtenerPosicion(pos2),obtenerPosicion(pos1));
     return res*t;
+}
+
+bool esCeldaDeCoordenada(gps t, celda celda){
+    bool latEnCelda = obtenerLatitud(obtenerEsquinaInferior(celda)) <= obtenerLatitud(t) && obtenerLatitud(t) < obtenerLatitud(obtenerEsquinaSuperior(celda));
+    bool longEnCelda = obtenerLongitud(obtenerEsquinaInferior(celda)) <= obtenerLongitud(t) && obtenerLongitud(t) < obtenerLongitud(obtenerEsquinaSuperior(celda));
+    return latEnCelda && longEnCelda;
+}
+
+int diferenciaEntreCeldas(nombre n1, nombre n2){
+    int res = abs(get<0>(n1)-get<0>(n2)) + abs(get<1>(n1)-get<1>(n2)) - 1;
+    return res;
+}
+
+bool cubierto(viaje v, distancia u, gps g){
+    int i = 0;
+    while(i<v.size() && distMts(obtenerPosicion(v[i]),g) >= u){
+        i++;
+    }
+    return i < v.size();
+}
+
+double calcVel(tuple<tiempo,gps> a, tuple<tiempo,gps> b){
+    return 	(distEnKM(obtenerPosicion(a),obtenerPosicion(b))*3600)/(obtenerTiempo(b)-obtenerTiempo(a));
+}
+
+celda makeCelda(gps esq1,gps esq2,int n,int i, int j){
+    double rango = (obtenerLatitud(esq2) - obtenerLatitud(esq1)) / n;
+    gps e1 = make_tuple( obtenerLatitud(esq1) + (rango * i) , obtenerLongitud(esq1) + (rango * j));
+    gps e2 = make_tuple( obtenerLatitud(esq1) + (rango * (i+1)) , obtenerLongitud(esq1) + (rango * (j+1)));
+    nombre name = make_tuple(i+1,j+1);
+    return make_tuple(e1,e2,name);
 }

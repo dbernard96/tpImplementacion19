@@ -7,8 +7,8 @@ using namespace std;
 TEST(cantidadDeSaltosTEST, noHaySaltos){
     grilla g = construirGrilla(make_tuple(0,0),make_tuple(1,1),2,2);
 
-    viaje v = {make_tuple(0,make_tuple(0,0)),make_tuple(1,make_tuple(1,0)),
-               make_tuple(2,make_tuple(1,1)),make_tuple(3,make_tuple(0,0))};
+    viaje v = {make_tuple(0,make_tuple(0,0)),make_tuple(1,make_tuple(0.99,0)),
+               make_tuple(2,make_tuple(0.99,0.99))};
 
     EXPECT_EQ(cantidadDeSaltos(g,v),0);
 }

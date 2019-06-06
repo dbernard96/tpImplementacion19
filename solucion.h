@@ -17,9 +17,9 @@ void escribirRecorridos(vector<recorrido> recorridos, string nombreArchivo);
 // NO ES NECESARIO IMPLEMENTAR:
 void completarHuecos(viaje& v, vector<int> faltantes);
 
+
 bool estaEnViaje(viaje v, tiempo t0,tiempo tf);
 bool cubierto(viaje v, distancia u ,gps g);
-bool esCeldaDeCoordenada(gps t, celda celda);
 double calcVel(tuple<tiempo,gps> a, tuple<tiempo,gps> b);
 double distanciaViaje(viaje v);
 

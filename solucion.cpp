@@ -57,11 +57,6 @@ bool excesoDeVelocidad(viaje v) {
     }
     return i < v.size()-1;
 }
-
-double calcVel(tuple<tiempo,gps> a, tuple<tiempo,gps> b){
-    return 	(distEnKM(obtenerPosicion(a),obtenerPosicion(b))*3600)/(obtenerTiempo(b)-obtenerTiempo(a));
-}
-
 /******++++**************************** EJERCICIO tiempoTotal ***********+++***********************/
 tiempo tiempoTotal(viaje v) {
     tiempo max = obtenerTiempo(v[0]);
@@ -76,22 +71,15 @@ tiempo tiempoTotal(viaje v) {
     }
     return max - min;
 }
-
 /************++*********************** EJERCICIO distanciaTotal ************++*********************/
 distancia distanciaTotal(viaje v) {
     v = quickSort(v);
-    return distanciaViaje(v);
-
-}
-
-distancia distanciaViaje(viaje v){
     distancia dist = 0;
     for(int i = 0; i < v.size()-1 ; i++){
         dist = dist + distEnKM(obtenerPosicion(v[i]),obtenerPosicion(v[i+1]));
     }
     return dist;
 }
-
 /***************************************** EJERCICIO flota ***************************************/
 int flota(vector<viaje> f, tiempo t0, tiempo tf) {
     int res = 0;
@@ -120,25 +108,19 @@ vector<gps> recorridoNoCubierto(viaje v, recorrido r, distancia u) {
     }
     return res;
 }
-
-bool cubierto(viaje v, distancia u, gps g){
-    int i = 0;
-    while(i<v.size() && distMts(obtenerPosicion(v[i]),g) >= u){
-        i++;
-    }
-    return i < v.size();
-}
 /************************************** EJERCICIO construirGrilla *******************************/
 
 grilla construirGrilla(gps esq1, gps esq2, int n, int m) {
-    grilla g;
-    double rango = (obtenerLatitud(esq2) - obtenerLatitud(esq1)) / n;
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < m; ++j) {
-            gps e1 = make_tuple( obtenerLatitud(esq1) + (rango * i) , obtenerLongitud(esq1) + (rango * j));
-            gps e2 = make_tuple( obtenerLatitud(esq1) + (rango * (i+1)) , obtenerLongitud(esq1) + (rango * (j+1)));
-            nombre n = make_tuple(i+1,j+1);
-            g.push_back(make_tuple(e1,e2,n));
+    grilla g(n*m,make_tuple(make_tuple(0,0),make_tuple(0,0),make_tuple(0,0)));
+    int i = 0;
+    int j = 0;
+    while(i < n){
+        g[n * i + j] = (makeCelda(esq1,esq2,n,i,j));
+        if(j < m - 1){
+            j++;
+        }else{
+            i++;
+            j=0;
         }
     }
     return g;
@@ -146,41 +128,30 @@ grilla construirGrilla(gps esq1, gps esq2, int n, int m) {
 
 /***************************************** EJERCICIO aPalabra **********************************/
 vector<nombre> aPalabra(recorrido t, grilla g) {
-    vector<nombre> res;
+    vector<nombre> res(t.size(),make_tuple(0,0));
     int i = 0;
-    while(i<t.size()) {
+    while(i < t.size()) {
         int j = 0;
         while (j < g.size() && !esCeldaDeCoordenada(t[i], g[j])) {
             j++;
         }
-        res.push_back(get<2>(g[j]));
+        res[i] = obtenerNombre(g[j]);
         i++;
     }
     return res;
 }
 
-bool esCeldaDeCoordenada(gps t, celda celda){
-    bool latEnCelda = get<0>(get<0>(celda))<=get<0>(t) && get<0>(t) < get<0>(get<1>(celda));
-    bool longEnCelda = get<1>(get<0>(celda))<=get<1>(t) && get<1>(t) < get<1>(get<1>(celda));
-    return latEnCelda && longEnCelda;
-}
-
 /************************************* EJERCICIO cantidadDeSaltos ******************************/
-int diferenciaEntreCeldas(nombre n1, nombre n2){
-    int res = abs(get<0>(n1)-get<0>(n2)) + abs(get<1>(n1)-get<1>(n2)) - 1;
-    return res;
-}
-
 int cantidadDeSaltos(grilla g, viaje v) {
     int res = 0;
     v = quickSort(v);
-    vector<nombre> nombres = {};
+    vector<nombre> nombres(v.size(), make_tuple(0,0));
     for (int i = 0; i < v.size(); ++i) {
-        for (int j = 0; j < g.size(); ++j) {
-            if(esCeldaDeCoordenada(get<1>(v[i]),g[j])){
-                nombres.push_back(get<2>(g[j]));
-            }
+        int j = 0;
+        while(!esCeldaDeCoordenada(obtenerPosicion(v[i]),g[j])){
+            j++;
         }
+        nombres[i] = obtenerNombre(g[j]);
     }
 
     for (int k = 0; k < nombres.size()-1; ++k) {
@@ -192,4 +163,17 @@ int cantidadDeSaltos(grilla g, viaje v) {
     return res;
 }
 /**************************************/
-void completarHuecos(viaje& v, vector<int> faltantes){}
+void completarHuecos(viaje& v, vector<int> faltantes){
+    viaje vOrd = quickSort(v);
+    gps hueco = make_tuple(-1000,-1000);
+    for (int i = 0; i < faltantes.size(); ++i) {
+        int min = faltantes[i];
+        int max = faltantes[i];
+        while(obtenerPosicion(vOrd[min])==hueco || obtenerPosicion(vOrd[max])==hueco){
+            if(obtenerPosicion(vOrd[min])==hueco) min--;
+            if(obtenerPosicion(vOrd[max])==hueco) max++;
+        }
+        distancia d = calculoDistHueco(vOrd[min],vOrd[max],vOrd[faltantes[i]]);
+        v[faltantes[i]] = make_tuple(obtenerTiempo(v[faltantes[i]]),desviarPunto(obtenerPosicion(vOrd[min]), d,0));
+    }
+}
