@@ -82,9 +82,7 @@ tuple<tiempo, gps> medicion(tiempo t, gps g) {
 
 viaje quickSort(viaje v){
     if(v.size() > 1) {
-        viaje min;
-        viaje eq;
-        viaje max;
+        viaje min; viaje eq; viaje max;
         int pi = div(v.size(), 2).quot;
         int i = 0;
         while (i < v.size()) {
@@ -110,11 +108,24 @@ viaje concatViaje(viaje a, viaje b){
     return ab;
 }
 
-distancia calculoDistHueco(tuple<tiempo,gps> pos1, tuple<tiempo,gps> pos2, tuple<tiempo,gps> hueco){
-    tiempo t = obtenerTiempo(hueco) - obtenerTiempo(pos1);
-    t /= (obtenerTiempo(pos2) - obtenerTiempo(pos1));
-    distancia res = distMts(obtenerPosicion(pos2),obtenerPosicion(pos1));
-    return res*t;
+double calcVel(tuple<tiempo,gps> a, tuple<tiempo,gps> b){
+    return 	(distEnKM(obtenerPosicion(a),obtenerPosicion(b)) * 3600)/(obtenerTiempo(b)-obtenerTiempo(a));
+}
+
+bool cubierto(viaje v, distancia u, gps g){
+    int i = 0;
+    while(i < v.size() && distMts(obtenerPosicion(v[i]),g) >= u){
+        i++;
+    }
+    return i < v.size();
+}
+
+celda makeCelda(gps esq1,gps esq2,int n,int i, int j){
+    double rango = (obtenerLatitud(esq2) - obtenerLatitud(esq1)) / n;
+    gps e1 = make_tuple( obtenerLatitud(esq1) + (rango * i) , obtenerLongitud(esq1) + (rango * j));
+    gps e2 = make_tuple( obtenerLatitud(esq1) + (rango * (i+1)) , obtenerLongitud(esq1) + (rango * (j+1)));
+    nombre name = make_tuple(i+1,j+1);
+    return make_tuple(e1,e2,name);
 }
 
 bool esCeldaDeCoordenada(gps t, celda celda){
@@ -128,22 +139,10 @@ int diferenciaEntreCeldas(nombre n1, nombre n2){
     return res;
 }
 
-bool cubierto(viaje v, distancia u, gps g){
-    int i = 0;
-    while(i<v.size() && distMts(obtenerPosicion(v[i]),g) >= u){
-        i++;
-    }
-    return i < v.size();
+distancia calculoDistHueco(tuple<tiempo,gps> pos1, tuple<tiempo,gps> pos2, tuple<tiempo,gps> hueco){
+    tiempo t = obtenerTiempo(hueco) - obtenerTiempo(pos1);
+    t /= (obtenerTiempo(pos2) - obtenerTiempo(pos1));
+    distancia res = distMts(obtenerPosicion(pos2),obtenerPosicion(pos1));
+    return res * t;
 }
 
-double calcVel(tuple<tiempo,gps> a, tuple<tiempo,gps> b){
-    return 	(distEnKM(obtenerPosicion(a),obtenerPosicion(b))*3600)/(obtenerTiempo(b)-obtenerTiempo(a));
-}
-
-celda makeCelda(gps esq1,gps esq2,int n,int i, int j){
-    double rango = (obtenerLatitud(esq2) - obtenerLatitud(esq1)) / n;
-    gps e1 = make_tuple( obtenerLatitud(esq1) + (rango * i) , obtenerLongitud(esq1) + (rango * j));
-    gps e2 = make_tuple( obtenerLatitud(esq1) + (rango * (i+1)) , obtenerLongitud(esq1) + (rango * (j+1)));
-    nombre name = make_tuple(i+1,j+1);
-    return make_tuple(e1,e2,name);
-}
